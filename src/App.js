@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useMemo, useReducer } from 'react';
+import React, { useState, useRef, useCallback, useMemo, useEffect } from 'react';
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
@@ -38,7 +38,7 @@ const DnDFlow = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [nodeData, updateNodeData] = useState({});
-  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+  const [edgeUpdate, setEdgeUpdate] = useState(true)
 
   // const onConnect = (
   //   (params) => setEdges((eds) => {
@@ -48,30 +48,27 @@ const DnDFlow = () => {
   //     console.log(nodes)
   //     return addEdge(params, eds)
   //   })
-  // );
+  // ); 
   
   const onConnect = (params) => {
     setEdges((eds) => {
       params['type'] = "straight";
       return addEdge(params, eds);
     });
-  
-    // Force component update
-    forceUpdate();
   };
 
+  // useEffect(()=> {
+  //   setEdges(edges);
+  // }, [edgeUpdate])
+
   const onDragOver = useCallback((event) => {
-    console.log("onDragOver")
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
   const onDrop = useCallback(
     (event) => {
-      console.log(event)
       event.preventDefault();
-
-
       const type = event.dataTransfer.getData('application/reactflow');
 
       if (typeof type === 'undefined' || !type) {
@@ -104,11 +101,18 @@ const DnDFlow = () => {
   // }
 
   const nodeCustomization = async (data) => {
+    // setNodes((nds) =>
+    //   nds.map((node) => {
+    //     if (node.id === data.id) {
+    //       node = data
+    //     }
+    //     return node;
+    //   }))
     setNodes((prevNodes) => {
-      const updatedNodes = prevNodes.map((item) => (item.id === data.id ? data : item));
-      return updatedNodes;
+      return prevNodes.map((item) => (item.id === data.id ? data : item));
     });
   };
+  
  
   const testEdge = useCallback((event) => { 
     console.log(event)
@@ -123,7 +127,7 @@ const DnDFlow = () => {
       <ReactFlowProvider>
         <Sidebar nodeData={nodeData} callback={nodeCustomization}/>
         <div style={{ height: "100vh" }} className="reactflow-wrapper" ref={reactFlowWrapper}>
-          <ReactFlow
+            <ReactFlow
             nodes={nodes}
             edges={edges}
             onNodesChange={onNodesChange}
@@ -138,9 +142,10 @@ const DnDFlow = () => {
             // isValidConnection={testEdge2}
             onConnectEnd={testEdge2} 
             fitView
-          >
-            <Background />
-            <Controls />
+            connectionMode="loose"
+            >
+              <Background />
+              <Controls />
           </ReactFlow>
         </div>
       </ReactFlowProvider>

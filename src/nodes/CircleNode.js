@@ -12,7 +12,7 @@ const CircleNode = ({ data }) => {
 
       {positions.map(position => (
         <Handle
-          key={position}
+          key={data.id + position}
           type={data?.[position] === "source" ? "source" : data?.[position] === "target" ? "target" : "source"}
           position={position}
           id={data.id + position}
