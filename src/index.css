@@ -30,33 +30,35 @@ code {
   margin-bottom: 10px;
 }
 
-.dndflow .dndnode {
-  height: 20px;
-  padding: 4px;
-  border: 1px solid #1a192b;
-  border-radius: 2px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: grab;
-}
 
 .dndflow .reactflow-wrapper {
   flex-grow: 1;
   height: 100%;
 }
 
-.dndflow .selectall {
-  margin-top: 10px;
+.circle {
+  padding-top: 27px;
+  width: 70px;
+  height: 43px;
+  border: 1px solid black;
+  border-radius: 40px;
 }
+
+.default {
+  width: 80px;
+  height: 20px;
+  padding-top: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
 
 @media screen and (min-width: 768px) {
   .dndflow {
     flex-direction: row;
   }
 
-  .dndflow aside {
+  aside {
     width: 20%;
     max-width: 250px;
   }

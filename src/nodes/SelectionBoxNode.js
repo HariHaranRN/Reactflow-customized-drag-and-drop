@@ -22,8 +22,8 @@ const options = [
 
 const SelectionBoxNode = ({ data }) => {
 
-  function onChange(){
-    console.log("ok")
+  function onChange(event){
+    console.log(event)
   }
 
   return (
@@ -38,10 +38,10 @@ const SelectionBoxNode = ({ data }) => {
               </option>
             ))}
           </select>
-          <Handle type={data?.top || "target"} position={Position.Top} />
-          <Handle type={data?.right || "source"} position={Position.Right} />
-          <Handle type={data?.bottom || "target" } position={Position.Bottom} />
-          <Handle type={data?.left || "source" } position={Position.Left} />
+          <Handle type="source" position={Position.Top} />
+          <Handle type="source" position={Position.Right} />
+          <Handle type="source" position={Position.Bottom} />
+          <Handle type="source" position={Position.Left} />
         </div>
       </div>
     </>

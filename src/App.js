@@ -53,6 +53,7 @@ const DnDFlow = () => {
   const onConnect = (params) => {
     setEdges((eds) => {
       params['type'] = "straight";
+      params['style'] = {strokeWidth: 2, stroke: "black"}
       return addEdge(params, eds);
     });
   };
@@ -83,7 +84,7 @@ const DnDFlow = () => {
         id: getId(),
         type,
         position,
-        data: { id: getHandleId(), top: "source", right: "source", bottom: "source", left: "source" },
+        data: { id: getHandleId(), label: "some" },
       };
       setNodes((nds) => nds.concat(newNode));
     },

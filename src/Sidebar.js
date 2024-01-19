@@ -67,7 +67,7 @@ const SideBar = ({ nodeData, callback }) => {
     <aside>
         <div className="description">Darg the node you want</div>
         { NodeTypes.map((type, index) => (
-            <div key={type+index} className="dndnode" onDragStart={(event) => onDragStart(event, type.key)} draggable>
+            <div key={type+index} style={{marginTop: 20, marginLeft: 80, textAlign: 'center', cursor: 'grab' }}className={type.className} onDragStart={(event) => onDragStart(event, type.key)} draggable>
                 {type.name}
             </div>
         ))}
