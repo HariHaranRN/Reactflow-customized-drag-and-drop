@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useMemo } from 'react';
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
@@ -38,6 +38,7 @@ const DnDFlow = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [nodeData, updateNodeData] = useState({});
+  const [edgeData, updateEdgeData] = useState({});
   const [edgeUpdate, setEdgeUpdate] = useState(true)
 
   // const onConnect = (
@@ -92,7 +93,13 @@ const DnDFlow = () => {
   );
 
   const editNode = (event, node)=> {
+    updateEdgeData({})
     updateNodeData(node)
+  }
+
+  const editEdge = (event, edge) => {
+    updateNodeData({})
+    updateEdgeData(edge)
   }
 
   // const nodeCustomization = (data) => {
@@ -101,7 +108,15 @@ const DnDFlow = () => {
   //   setNodes(newNode); 
   // }
 
-  const nodeCustomization = async (data) => {
+  const edgeCustomization = (data) => {
+    console.log(data)
+    setEdges((prevEdges) => {
+      return prevEdges.map((item) => (item.id === data.id ? data : item));
+    });
+    console.log(edges)
+  }
+
+  const nodeCustomization = (data) => {
     // setNodes((nds) =>
     //   nds.map((node) => {
     //     if (node.id === data.id) {
@@ -113,22 +128,13 @@ const DnDFlow = () => {
       return prevNodes.map((item) => (item.id === data.id ? data : item));
     });
   };
-  
- 
-  const testEdge = useCallback((event) => { 
-    console.log(event)
-  })
-
-  const testEdge2 = (connection) => {
-    console.log(edges)
-  }
 
   return (
     <div className="dndflow">
       <ReactFlowProvider>
-        <Sidebar nodeData={nodeData} callback={nodeCustomization}/>
-        <div style={{ height: "100vh" }} className="reactflow-wrapper" ref={reactFlowWrapper}>
-            <ReactFlow
+        <Sidebar nodeData={nodeData} edgeData={edgeData} callback={nodeCustomization} callback2={edgeCustomization}/>
+        <div style={{ height: "100vh"}} className="reactflow-wrapper" ref={reactFlowWrapper}>
+          <ReactFlow
             nodes={nodes}
             edges={edges}
             onNodesChange={onNodesChange}
@@ -139,13 +145,11 @@ const DnDFlow = () => {
             onDragOver={onDragOver}
             nodeTypes={nodeTypes}
             onNodeClick={editNode} 
-            // onEdgeMouseEnter={testEdge()}
-            // isValidConnection={testEdge2}
-            onConnectEnd={testEdge2} 
+            onEdgeClick={editEdge}
             fitView
             connectionMode="loose"
             >
-              <Background />
+              <Background color='red'/>
               <Controls />
           </ReactFlow>
         </div>

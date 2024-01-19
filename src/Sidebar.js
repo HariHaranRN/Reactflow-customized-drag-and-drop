@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NodeTypes } from './constants';
 
-const SideBar = ({ nodeData, callback }) => {
+const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
 
     const [cdnObject, updateCdnObject] = useState({
         name: "",
@@ -18,8 +18,16 @@ const SideBar = ({ nodeData, callback }) => {
         id: "",
         value: ""
     });
+
+    const [edgeObject, updateEdgeObject] = useState({
+        strokeWidth: 2,
+        stroke: 'black',
+        strokeDasharray: 0,
+        animated: false
+    })
     const [isCDN, updateIsCDN] = useState(false);
     const [isISN, updateIsISN] = useState(false);
+    const [isEdge, updateIsEdge] = useState(false);
 
     const handleOptions = [
         { value: 'source', label: 'Source' },
@@ -31,37 +39,76 @@ const SideBar = ({ nodeData, callback }) => {
     };
 
     useEffect(()=> {
-        if(nodeData?.type === "circle" || nodeData?.type === "default"){
+        console.log(edgeData)
+        if(nodeData?.type === "circle" || nodeData?.type === "default"|| nodeData?.type === "input"|| nodeData?.type === "output"){
             updateIsCDN(true);
             updateIsISN(false);
+            updateIsEdge(false);
             updateCdnObject(nodeData)
         }else if(nodeData?.type === "textInput" || nodeData?.type === "selectionBox") {
             updateIsISN(true);
             updateIsCDN(false);
+            updateIsEdge(false);
             updateIsnObject(nodeData)
-        }else {
+        }else if(edgeData?.type === "straight") {
             updateIsISN(false);
             updateIsCDN(false);
+            updateIsEdge(true);
+            updateEdgeObject(edgeData)
+        } else {
+            updateIsISN(false);
+            updateIsCDN(false);
+            updateIsEdge(false);
         }
-    }, [nodeData])
+    }, [nodeData, edgeData])
 
     const handleSubmitCDN = () => {
         callback(cdnObject)
     }
 
-    const handleInputChange = (event) => {
+    const handleCdnInputChange = (event) => {
         const { name, value } = event.target;
         const newData = {
             ...cdnObject.data,
             [name]: value
           };
-          const newState = {
+        const newState = {
             ...cdnObject,
             data: newData,
-          };
+        };
       
         updateCdnObject(newState);
     };
+
+    const handleEdgeChange = (event) => {
+        const { name, value } = event.target;
+        const style = {
+            ...edgeObject.style,
+        };
+        let animation = false;
+        if(name === "strokeWidth") {
+            style.strokeWidth = value
+        }
+        // if(name === "stoke") {
+        //     style.stroke = value
+        // }
+        if(name === "strokeDasharray") {
+            style.strokeDasharray = value
+        }
+        if(name === "animated"){
+            animation = Boolean(value)
+        }
+        const newState = {
+        ...edgeObject,
+        animated: animation,
+        style: style,
+        };
+        updateEdgeObject(newState);
+    }
+
+    const handleEdgeSubmit = (event) => {
+        callback2(edgeObject)
+    }
 
     return (
     <aside>
@@ -80,7 +127,7 @@ const SideBar = ({ nodeData, callback }) => {
                     type="text"
                     name="name"
                     value={cdnObject?.name}
-                    onChange={handleInputChange}
+                    onChange={handleCdnInputChange}
                 />
                 </label>
                 <br />
@@ -90,7 +137,7 @@ const SideBar = ({ nodeData, callback }) => {
                     type="text"
                     name="backgroundColor"
                     value={cdnObject.backgroundColor}
-                    onChange={handleInputChange}
+                    onChange={handleCdnInputChange}
                 />
                 </label>
                 <br />
@@ -100,7 +147,7 @@ const SideBar = ({ nodeData, callback }) => {
                     type="text"
                     name='borderColor'
                     value={cdnObject?.borderColor}
-                    onChange={handleInputChange}
+                    onChange={handleCdnInputChange}
                 />
                 </label>
                 <br /> */}
@@ -110,7 +157,7 @@ const SideBar = ({ nodeData, callback }) => {
                     type="text"
                     name='fontColor'
                     value={cdnObject.fontColor}
-                    onChange={handleInputChange}
+                    onChange={handleCdnInputChange}
                 />
                 </label>
                 <br />
@@ -120,7 +167,7 @@ const SideBar = ({ nodeData, callback }) => {
                     <select
                     name="top"
                     value={cdnObject.role}
-                    onChange={handleInputChange}
+                    onChange={handleCdnInputChange}
                     >
                     {handleOptions.map((option) => (
                         <option key={option.value} value={option.value}>
@@ -135,7 +182,7 @@ const SideBar = ({ nodeData, callback }) => {
                     <select
                     name="right"
                     value={cdnObject.role}
-                    onChange={handleInputChange}
+                    onChange={handleCdnInputChange}
                     >
                     {handleOptions.map((option) => (
                         <option key={option.value} value={option.value}>
@@ -150,7 +197,7 @@ const SideBar = ({ nodeData, callback }) => {
                     <select
                     name="bottom"
                     value={cdnObject.role}
-                    onChange={handleInputChange}
+                    onChange={handleCdnInputChange}
                     >
                     {handleOptions.map((option) => (
                         <option key={option.value} value={option.value}>
@@ -165,7 +212,7 @@ const SideBar = ({ nodeData, callback }) => {
                     <select
                     name="left"
                     value={cdnObject.role}
-                    onChange={handleInputChange}
+                    onChange={handleCdnInputChange}
                     >
                     {handleOptions.map((option) => (
                         <option key={option.value} value={option.value}>
@@ -187,7 +234,7 @@ const SideBar = ({ nodeData, callback }) => {
                     type="text"
                     name='label'
                     value={isnObject?.label}
-                    onChange={handleInputChange}
+                    onChange={handleCdnInputChange}
                 />
                 </label>
                 <br />
@@ -197,7 +244,7 @@ const SideBar = ({ nodeData, callback }) => {
                     type="text"
                     name='id'
                     value={isnObject.id}
-                    onChange={handleInputChange}
+                    onChange={handleCdnInputChange}
                 />
                 </label>
                 <br></br>
@@ -207,7 +254,7 @@ const SideBar = ({ nodeData, callback }) => {
                     <select
                     name="value"
                     value={isnObject.role}
-                    onChange={handleInputChange}
+                    onChange={handleCdnInputChange}
                     >
                     {handleOptions.map((option) => (
                         <option key={option.value} value={option.value}>
@@ -222,7 +269,7 @@ const SideBar = ({ nodeData, callback }) => {
                     <select
                     name="role"
                     value={isnObject.role}
-                    onChange={handleInputChange}
+                    onChange={handleCdnInputChange}
                     >
                     {handleOptions.map((option) => (
                         <option key={option.value} value={option.value}>
@@ -237,7 +284,7 @@ const SideBar = ({ nodeData, callback }) => {
                     <select
                     name="role"
                     value={isnObject.role}
-                    onChange={handleInputChange}
+                    onChange={handleCdnInputChange}
                     >
                     {handleOptions.map((option) => (
                         <option key={option.value} value={option.value}>
@@ -252,7 +299,7 @@ const SideBar = ({ nodeData, callback }) => {
                     <select
                     name="role"
                     value={isnObject.role}
-                    onChange={handleInputChange}
+                    onChange={handleCdnInputChange}
                     >
                     {handleOptions.map((option) => (
                         <option key={option.value} value={option.value}>
@@ -264,6 +311,56 @@ const SideBar = ({ nodeData, callback }) => {
                 <br />
                 <button type='button'>Update</button>
           </form>
+        )}
+        {isEdge && (
+            <div>
+                <form>
+                    <h1>Edge Attributes</h1>
+                    <label>
+                    Line Width:
+                    <input
+                        type="number"
+                        name="strokeWidth"
+                        value={edgeObject?.strokeWidth}
+                        onChange={handleEdgeChange}
+                    />
+                    </label>
+                    <br />
+                    {/* <label>
+                    Line Color:
+                    <input
+                        type="text"
+                        name="stroke"
+                        value={edgeObject?.stroke}
+                        onChange={handleEdgeChange}
+                    />
+                    </label>
+                    <br /> */}
+                    <label>
+                    line Dash size:
+                    <input
+                        type="numer"
+                        name="strokeDasharray"
+                        value={edgeObject?.strokeDasharray}
+                        onChange={handleEdgeChange}
+                    />
+                    </label>
+                    <br />
+                    <label>
+                        Animation:
+                            <select
+                            name="animated"
+                            value={edgeObject.animated}
+                            onChange={handleEdgeChange}
+                            >
+                                <option value={false}>No</option>
+                                <option value={true}>Yes</option>
+                            </select>
+                    </label>
+                    <br />
+                    <button type='button' onClick={handleEdgeSubmit}>Submit</button>
+                </form>
+            </div>
         )}
     </aside>
     );
