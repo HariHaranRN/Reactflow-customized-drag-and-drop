@@ -15,20 +15,19 @@ import CircleNode from './nodes/CircleNode';
 import './index.css';
 import TextInputNode from './nodes/TextInputNode';
 import SelectionBoxNode from './nodes/SelectionBoxNode';
-
+import RectangleNode from './nodes/RectangleNode'
 
 
 const DnDFlow = () => {
 
   const initialNodes = [];
 
-  const nodeTypes = useMemo(
-    () => ({
+  const nodeTypes = useMemo(() => ({
     circle: CircleNode,
     textInput: TextInputNode,
-    selectionBox: SelectionBoxNode
-  }),
-  []);
+    selectionBox: SelectionBoxNode,
+    rectangle: RectangleNode
+  }),[]);
 
   let id = 0;
   const getId = () => `dndnode_${id++}`;
@@ -41,16 +40,6 @@ const DnDFlow = () => {
   const [edgeData, updateEdgeData] = useState({});
   const [edgeUpdate, setEdgeUpdate] = useState(true)
 
-  // const onConnect = (
-  //   (params) => setEdges((eds) => {
-  //     console.log("coming")
-  //     params['type'] = "straight";
-  //     console.log(params)
-  //     console.log(nodes)
-  //     return addEdge(params, eds)
-  //   })
-  // ); 
-  
   const onConnect = (params) => {
     setEdges((eds) => {
       params['type'] = "straight";
@@ -58,10 +47,6 @@ const DnDFlow = () => {
       return addEdge(params, eds);
     });
   };
-
-  // useEffect(()=> {
-  //   setEdges(edges);
-  // }, [edgeUpdate])
 
   const onDragOver = useCallback((event) => {
     event.preventDefault();
@@ -117,13 +102,6 @@ const DnDFlow = () => {
   }
 
   const nodeCustomization = (data) => {
-    // setNodes((nds) =>
-    //   nds.map((node) => {
-    //     if (node.id === data.id) {
-    //       node = data
-    //     }
-    //     return node;
-    //   }))
     setNodes((prevNodes) => {
       return prevNodes.map((item) => (item.id === data.id ? data : item));
     });

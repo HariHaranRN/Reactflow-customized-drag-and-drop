@@ -8,10 +8,6 @@ const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
         backgroundColor: "",
         // borderColor: "",
         fontColor: "",
-        top: "source",
-        right: "source",
-        bottom: "source",
-        left: "source"
     });
     const [isnObject, updateIsnObject] = useState({
         label: "",
@@ -40,7 +36,7 @@ const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
 
     useEffect(()=> {
         console.log(edgeData)
-        if(nodeData?.type === "circle" || nodeData?.type === "default"|| nodeData?.type === "input"|| nodeData?.type === "output"){
+        if(nodeData?.type === "circle" || nodeData?.type === "rectangle"|| nodeData?.type === "input"|| nodeData?.type === "output"){
             updateIsCDN(true);
             updateIsISN(false);
             updateIsEdge(false);
@@ -122,7 +118,7 @@ const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
             <form>
                 <h1>Node Attributes</h1>
                 <label>
-                Name:
+                Name<br/>
                 <input
                     type="text"
                     name="name"
@@ -130,9 +126,9 @@ const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
                     onChange={handleCdnInputChange}
                 />
                 </label>
-                <br />
+                <br /><br />
                 <label>
-                BG Color:
+                BG Color<br />
                 <input
                     type="text"
                     name="backgroundColor"
@@ -140,7 +136,7 @@ const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
                     onChange={handleCdnInputChange}
                 />
                 </label>
-                <br />
+                <br /><br />
                 {/* <label>
                 Border Color:
                 <input
@@ -152,7 +148,7 @@ const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
                 </label>
                 <br /> */}
                 <label>
-                Font Color:
+                Font Color<br />
                 <input
                     type="text"
                     name='fontColor'
@@ -160,68 +156,7 @@ const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
                     onChange={handleCdnInputChange}
                 />
                 </label>
-                <br />
-                <h3>Handles</h3>
-                <label>
-                Top Handle:
-                    <select
-                    name="top"
-                    value={cdnObject.role}
-                    onChange={handleCdnInputChange}
-                    >
-                    {handleOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                        {option.label}
-                        </option>
-                    ))}
-                    </select>
-                </label>
-                <br />
-                <label>
-                Right Handle:
-                    <select
-                    name="right"
-                    value={cdnObject.role}
-                    onChange={handleCdnInputChange}
-                    >
-                    {handleOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                        {option.label}
-                        </option>
-                    ))}
-                    </select>
-                </label>
-                <br />
-                <label>
-                Bottom Handle:
-                    <select
-                    name="bottom"
-                    value={cdnObject.role}
-                    onChange={handleCdnInputChange}
-                    >
-                    {handleOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                        {option.label}
-                        </option>
-                    ))}
-                    </select>
-                </label>
-                <br />
-                <label>
-                Left Handle:
-                    <select
-                    name="left"
-                    value={cdnObject.role}
-                    onChange={handleCdnInputChange}
-                    >
-                    {handleOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                        {option.label}
-                        </option>
-                    ))}
-                    </select>
-                </label>
-                <br />
+                <br /><br />
                 <button type='button' onClick={handleSubmitCDN}>Update</button>
           </form>
         )}
@@ -229,7 +164,7 @@ const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
             <form>
                 <h1>Node Attributes</h1>
                 <label>
-                Label:
+                Label<br />
                 <input
                     type="text"
                     name='label'
@@ -239,7 +174,7 @@ const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
                 </label>
                 <br />
                 <label>
-                ID:
+                ID<br />
                 <input
                     type="text"
                     name='id'
@@ -248,67 +183,6 @@ const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
                 />
                 </label>
                 <br></br>
-                <h3>Handles</h3>
-                <label>
-                Top Handle:
-                    <select
-                    name="value"
-                    value={isnObject.role}
-                    onChange={handleCdnInputChange}
-                    >
-                    {handleOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                        {option.label}
-                        </option>
-                    ))}
-                    </select>
-                </label>
-                <br />
-                <label>
-                Right Handle:
-                    <select
-                    name="role"
-                    value={isnObject.role}
-                    onChange={handleCdnInputChange}
-                    >
-                    {handleOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                        {option.label}
-                        </option>
-                    ))}
-                    </select>
-                </label>
-                <br />
-                <label>
-                Bottom Handle:
-                    <select
-                    name="role"
-                    value={isnObject.role}
-                    onChange={handleCdnInputChange}
-                    >
-                    {handleOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                        {option.label}
-                        </option>
-                    ))}
-                    </select>
-                </label>
-                <br />
-                <label>
-                Left Handle:
-                    <select
-                    name="role"
-                    value={isnObject.role}
-                    onChange={handleCdnInputChange}
-                    >
-                    {handleOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                        {option.label}
-                        </option>
-                    ))}
-                    </select>
-                </label>
-                <br />
                 <button type='button'>Update</button>
           </form>
         )}

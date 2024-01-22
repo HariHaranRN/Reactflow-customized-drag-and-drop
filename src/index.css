@@ -52,6 +52,22 @@ code {
   border-radius: 5px;
 }
 
+aside form input, aside form select {
+  width: 80%;
+  margin: 10px 0px;
+  padding: 8px;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+
+aside form button {
+  width: 88%;
+  color: white;
+  background-color: cornflowerblue;
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 10px;
+}
 
 @media screen and (min-width: 768px) {
   .dndflow {
