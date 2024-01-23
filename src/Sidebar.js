@@ -96,9 +96,9 @@ const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
         if(name === "strokeWidth") {
             style.strokeWidth = value
         }
-        // if(name === "stoke") {
-        //     style.stroke = value
-        // }
+        if(name === "stoke") {
+            style.stroke = value
+        }
         if(name === "strokeDasharray") {
             style.strokeDasharray = value
         }
