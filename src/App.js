@@ -38,12 +38,11 @@ const DnDFlow = () => {
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [nodeData, updateNodeData] = useState({});
   const [edgeData, updateEdgeData] = useState({});
-  const [edgeUpdate, setEdgeUpdate] = useState(true)
 
   const onConnect = (params) => {
     setEdges((eds) => {
       params['type'] = "straight";
-      params['style'] = {strokeWidth: 2, stroke: "black"}
+      params['style'] = {strokeWidth: 2, stroke: "black", strokeDasharray: 0}
       return addEdge(params, eds);
     });
   };
@@ -94,11 +93,9 @@ const DnDFlow = () => {
   // }
 
   const edgeCustomization = (data) => {
-    console.log(data)
     setEdges((prevEdges) => {
       return prevEdges.map((item) => (item.id === data.id ? data : item));
     });
-    console.log(edges)
   }
 
   const nodeCustomization = (data) => {

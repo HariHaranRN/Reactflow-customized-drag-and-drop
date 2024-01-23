@@ -4,53 +4,64 @@ import { NodeTypes } from './constants';
 const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
 
     const [cdnObject, updateCdnObject] = useState({
-        name: "",
+        label: "",
         backgroundColor: "",
-        // borderColor: "",
+        borderColor: "",
         fontColor: "",
     });
     const [isnObject, updateIsnObject] = useState({
         label: "",
         id: "",
-        value: ""
     });
 
     const [edgeObject, updateEdgeObject] = useState({
         strokeWidth: 2,
         stroke: 'black',
-        strokeDasharray: 0,
-        animated: false
+        strokeDasharray: 0
     })
     const [isCDN, updateIsCDN] = useState(false);
     const [isISN, updateIsISN] = useState(false);
     const [isEdge, updateIsEdge] = useState(false);
 
-    const handleOptions = [
-        { value: 'source', label: 'Source' },
-        { value: 'target', label: 'Target' },
-      ];
     const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
     };
 
     useEffect(()=> {
-        console.log(edgeData)
         if(nodeData?.type === "circle" || nodeData?.type === "rectangle"|| nodeData?.type === "input"|| nodeData?.type === "output"){
             updateIsCDN(true);
             updateIsISN(false);
             updateIsEdge(false);
-            updateCdnObject(nodeData)
+            const payload = {
+                label: nodeData?.data?.label || "",
+                backgroundColor: nodeData?.data?.backgroundColor || "",
+                borderColor: nodeData?.data?.borderColor || "",
+                fontColor: nodeData?.data?.backgroundColor || "",
+            }
+            updateCdnObject(payload)
         }else if(nodeData?.type === "textInput" || nodeData?.type === "selectionBox") {
             updateIsISN(true);
             updateIsCDN(false);
             updateIsEdge(false);
-            updateIsnObject(nodeData)
+            const payload = {
+                label: nodeData?.data?.label || "",
+                id: nodeData?.data?.id || "",
+            }
+            updateIsnObject(payload)
         }else if(edgeData?.type === "straight") {
             updateIsISN(false);
             updateIsCDN(false);
             updateIsEdge(true);
-            updateEdgeObject(edgeData)
+            console.log(edgeData);
+            console.log(edgeObject)
+            const payload = {
+                strokeWidth: edgeData?.style?.strokeWidth || 2,
+                stroke: edgeData?.style?.stroke || "",
+                strokeDasharray: edgeData?.style?.strokeDasharray || 0,
+                animated: edgeData?.animated || false,
+            }
+            updateEdgeObject(payload)
         } else {
             updateIsISN(false);
             updateIsCDN(false);
@@ -65,11 +76,11 @@ const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
     const handleCdnInputChange = (event) => {
         const { name, value } = event.target;
         const newData = {
-            ...cdnObject.data,
+            ...nodeData.data,
             [name]: value
           };
         const newState = {
-            ...cdnObject,
+            ...nodeData,
             data: newData,
         };
       
@@ -79,7 +90,7 @@ const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
     const handleEdgeChange = (event) => {
         const { name, value } = event.target;
         const style = {
-            ...edgeObject.style,
+            ...edgeData.style,
         };
         let animation = false;
         if(name === "strokeWidth") {
@@ -95,7 +106,7 @@ const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
             animation = Boolean(value)
         }
         const newState = {
-        ...edgeObject,
+        ...edgeData,
         animated: animation,
         style: style,
         };
@@ -118,11 +129,11 @@ const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
             <form>
                 <h1>Node Attributes</h1>
                 <label>
-                Name<br/>
+                Label<br/>
                 <input
                     type="text"
-                    name="name"
-                    value={cdnObject?.name}
+                    name="label"
+                    value={cdnObject?.label}
                     onChange={handleCdnInputChange}
                 />
                 </label>
@@ -132,13 +143,13 @@ const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
                 <input
                     type="text"
                     name="backgroundColor"
-                    value={cdnObject.backgroundColor}
+                    value={cdnObject?.backgroundColor}
                     onChange={handleCdnInputChange}
                 />
                 </label>
-                <br /><br />
-                {/* <label>
-                Border Color:
+                <br />
+                <label>
+                Border Color<br />
                 <input
                     type="text"
                     name='borderColor'
@@ -146,13 +157,13 @@ const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
                     onChange={handleCdnInputChange}
                 />
                 </label>
-                <br /> */}
+                <br />
                 <label>
                 Font Color<br />
                 <input
                     type="text"
                     name='fontColor'
-                    value={cdnObject.fontColor}
+                    value={cdnObject?.fontColor}
                     onChange={handleCdnInputChange}
                 />
                 </label>
@@ -224,7 +235,7 @@ const SideBar = ({ nodeData, edgeData, callback, callback2 }) => {
                         Animation:
                             <select
                             name="animated"
-                            value={edgeObject.animated}
+                            value={edgeObject?.animated}
                             onChange={handleEdgeChange}
                             >
                                 <option value={false}>No</option>
